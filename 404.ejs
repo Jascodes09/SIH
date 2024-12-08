@@ -1,7 +1,152 @@
-<html>
-<head><title>404 - Page Not Found</title></head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>404 - Page Not Found</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #2c3e50;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            animation: pop 1s ease-out infinite alternate;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        a {
+            font-size: 1rem;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            padding: 10px 20px;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #3498db;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Decorative Animation */
+        .background-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(52, 152, 219, 0.2);
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .background-circle.small {
+            width: 100px;
+            height: 100px;
+            bottom: 10%;
+            right: 20%;
+            animation-delay: 0s;
+        }
+
+        .background-circle.medium {
+            width: 150px;
+            height: 150px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .background-circle.large {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: 30%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+    </style>
+</head>
+
 <body>
-  <h1>404 - Page Not Found</h1>
-  <p>The page you are looking for does not exist.</p>
+
+    <!-- Decorative Floating Circles -->
+    <div class="background-circle small"></div>
+    <div class="background-circle medium"></div>
+    <div class="background-circle large"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>404</h1>
+        <p>The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/">Go back to the homepage</a>
+    </div>
+
 </body>
+
 </html>
