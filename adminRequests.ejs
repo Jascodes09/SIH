@@ -4,51 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Certificate Requests</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f7fc; /* Soft background color */
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #4c6a92; /* Subtle blue for header */
+            color: white;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header h2 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .request-card {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .request-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .request-card h3 {
+            font-size: 1.5rem;
+            color: #2e4053; /* Soft dark gray */
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .request-card p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #7f8c8d; /* Light gray text */
+        }
+        .status {
+            font-weight: bold;
+            color: #1abc9c; /* Soft teal */
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .buttons button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        .buttons .verify {
+            background-color: #1abc9c;
+            color: white;
+        }
+        .buttons .verify:hover {
+            background-color: #16a085;
+        }
+        .buttons .reject {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .buttons .reject:hover {
+            background-color: #c0392b;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            background-color: #4c6a92;
+            color: white;
+            border-radius: 0 0 15px 15px;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h2 {
+                font-size: 1.8rem;
+            }
+            .container {
+                padding: 20px;
+            }
+            .request-card {
+                padding: 15px;
+            }
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .buttons button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Pending Certificate Requests</h2>
-    <% users.forEach(user => { %>
-        <div>
-            <h3><%= user.name %> - <%= user.email %></h3>
-            <p>Status: <%= user.casteApplication.status %></p>
-            <button onclick="verifyDocument('<%= user._id %>', 'caste')">Verify Document</button>
-            <button onclick="rejectRequest('<%= user._id %>', 'caste')">Reject Request</button>
-            <hr>
-        </div>
-    <% }); %>
-    
+    <header>
+        <h2>Admin Certificate Requests</h2>
+    </header>
+
+    <div class="container">
+        <% users.forEach(user => { %>
+            <div class="request-card">
+                <h3>
+                    <span><%= user.name %> - <%= user.email %></span>
+                    <span class="status">Status: <%= user.casteApplication.status %></span>
+                </h3>
+                <p>Application for Caste Certificate</p>
+                <div class="buttons">
+                    <button class="verify" onclick="verifyDocument('<%= user._id %>', 'caste')">Verify Document</button>
+                    <button class="reject" onclick="rejectRequest('<%= user._id %>', 'caste')">Reject Request</button>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Certificate Hub Admin Panel</p>
+    </footer>
+
     <script>
         function verifyDocument(userId, certificateType) {
-            // Simulate verification (you can prompt the admin to actually verify the document)
-            const isVerified = confirm('Is the document verified?');
-            const feedback = isVerified ? '' : prompt('Please provide feedback for rejection');
-
+            const isVerified = confirm('Are you sure you want to verify this document?');
+            const feedback = isVerified ? '' : prompt('Provide feedback for rejection:');
+            
             fetch(`/admin/verify/${certificateType}/${userId}`, {
                 method: 'POST',
                 body: JSON.stringify({ isVerified, feedback }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
             })
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
-                location.reload(); // Reload the page to show updated status
+                location.reload();
             })
             .catch(err => {
                 console.error(err);
                 alert('An error occurred');
             });
         }
-
         function rejectRequest(userId, certificateType) {
-            const feedback = prompt('Please provide the reason for rejection');
+            const feedback = prompt('Provide the reason for rejection:');
+            
+            if (!feedback) {
+                alert('Rejection reason is required.');
+                return;
+            }
+            
             fetch(`/admin/verify/${certificateType}/${userId}`, {
                 method: 'POST',
                 body: JSON.stringify({ isVerified: false, feedback }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
             })
             .then(response => response.json())
             .then(data => {
